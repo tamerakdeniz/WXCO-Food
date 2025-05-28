@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.wxco.food.ui.fragment.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home">
+        
+        <action
+            android:id="@+id/action_homeFragment_to_foodDetailFragment"
+            app:destination="@id/foodDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.wxco.food.ui.fragment.FavoritesFragment"
+        android:label="@string/favorites"
+        tools:layout="@layout/fragment_favorites">
+        
+        <action
+            android:id="@+id/action_favoritesFragment_to_foodDetailFragment"
+            app:destination="@id/foodDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.wxco.food.ui.fragment.CartFragment"
+        android:label="@string/cart"
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/foodDetailFragment"
+        android:name="com.wxco.food.ui.fragment.FoodDetailFragment"
+        android:label="@string/food_detail"
+        tools:layout="@layout/fragment_food_detail">
+        
+        <argument
+            android:name="food"
+            app:argType="com.wxco.food.data.model.Food" />
+    </fragment>
+
+</navigation> 
