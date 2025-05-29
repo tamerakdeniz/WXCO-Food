@@ -1,9 +1,13 @@
 package com.wxco.food
 
+import android.animation.Animator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.wxco.food.databinding.ActivityMainBinding
@@ -13,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +38,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         
         setupNavigation()
+        setupLoadingAnimation()
+        showLoadingAnimation() // İlk açılışta animasyonu göster
     }
     
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         binding.bottomNavigation.setupWithNavController(navController)
+
+        // Navigation değişikliklerini dinle
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            showLoadingAnimation()
+        }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -58,6 +70,41 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+    }
+
+    private fun setupLoadingAnimation() {
+        binding.loadingAnimation.apply {
+            setAnimationFromUrl("https://lottie.host/089867eb-af66-4fc8-803c-5a3ec8a7b0be/giYUgdbwD7.lottie")
+            repeatCount = 1
+            speed = 2f
+        }
+    }
+
+    private fun showLoadingAnimation() {
+        binding.loadingAnimation.apply {
+            visibility = View.VISIBLE
+            addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator) {}
+                override fun onAnimationEnd(p0: Animator) {}
+                override fun onAnimationCancel(p0: Animator) {
+                    visibility = View.GONE
+                }
+                override fun onAnimationRepeat(p0: Animator) {}
+            })
+            playAnimation()
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            hideLoadingAnimation()
+        }, 800)
+    }
+
+    private fun hideLoadingAnimation() {
+        binding.loadingAnimation.apply {
+            removeAllAnimatorListeners()
+            cancelAnimation()
+            visibility = View.GONE
         }
     }
 } 

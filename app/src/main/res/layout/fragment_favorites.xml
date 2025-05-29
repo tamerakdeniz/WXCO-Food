@@ -38,13 +38,6 @@
                     android:text="@string/empty_favorites"
                     android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Add some foods to your favorites!"
-                    android:textSize="14sp" />
-
             </LinearLayout>
 
         </FrameLayout>

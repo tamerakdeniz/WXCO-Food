@@ -130,7 +130,7 @@ class CartFragment : Fragment() {
             try {
                 showCheckoutAnimation()
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Checkout işlemi sırasında bir hata oluştu", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "An error occurred during the checkout process", Toast.LENGTH_SHORT).show()
                 showEmptyState()
             }
         }
