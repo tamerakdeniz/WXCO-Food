@@ -108,12 +108,14 @@ class CartFragment : Fragment() {
         binding.textEmpty.visibility = View.VISIBLE
         binding.recyclerViewCart.visibility = View.GONE
         binding.layoutTotal.visibility = View.GONE
+        binding.checkoutAnimation.visibility = View.GONE
     }
     
     private fun showCartItems(cartFoods: List<Any>) {
         binding.textEmpty.visibility = View.GONE
         binding.recyclerViewCart.visibility = View.VISIBLE
         binding.layoutTotal.visibility = View.VISIBLE
+        binding.checkoutAnimation.visibility = View.GONE
     }
     
     private fun setupSwipeRefresh() {
@@ -125,7 +127,45 @@ class CartFragment : Fragment() {
     
     private fun setupCheckoutButton() {
         binding.btnCheckout.setOnClickListener {
-            Toast.makeText(requireContext(), "Checkout functionality coming soon!", Toast.LENGTH_SHORT).show()
+            try {
+                showCheckoutAnimation()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Checkout işlemi sırasında bir hata oluştu", Toast.LENGTH_SHORT).show()
+                showEmptyState()
+            }
+        }
+    }
+
+    private fun showCheckoutAnimation() {
+        binding.recyclerViewCart.visibility = View.GONE
+        binding.layoutTotal.visibility = View.GONE
+        binding.textEmpty.visibility = View.GONE
+        binding.checkoutAnimation.visibility = View.VISIBLE
+
+        binding.checkoutAnimation.apply {
+            setAnimationFromUrl("https://lottie.host/7fa3bb6b-3649-4753-935e-969fdee5230c/X5bTY3mi0d.lottie")
+            repeatCount = 0
+            speed = 1f
+            playAnimation()
+            
+            addAnimatorListener(object : android.animation.Animator.AnimatorListener {
+                override fun onAnimationStart(animation: android.animation.Animator) {}
+                
+                override fun onAnimationEnd(animation: android.animation.Animator) {
+                    if (isAdded && activity != null) {
+                        showEmptyState()
+                        viewModel.clearCart()
+                    }
+                }
+                
+                override fun onAnimationCancel(animation: android.animation.Animator) {
+                    if (isAdded && activity != null) {
+                        showEmptyState()
+                    }
+                }
+                
+                override fun onAnimationRepeat(animation: android.animation.Animator) {}
+            })
         }
     }
     

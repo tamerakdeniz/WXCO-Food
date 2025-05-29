@@ -65,4 +65,11 @@
 
     </LinearLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/checkoutAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@android:color/darker_gray" />
+
 </LinearLayout> 

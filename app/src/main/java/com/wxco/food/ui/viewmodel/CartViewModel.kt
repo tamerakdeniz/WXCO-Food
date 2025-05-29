@@ -71,4 +71,31 @@ class CartViewModel @Inject constructor(
     fun refreshCart() {
         loadCartFoods()
     }
+
+    fun clearCart() {
+        _operationResult.value = Resource.Loading()
+        viewModelScope.launch {
+            try {
+                // Get all cart items
+                when (val cartResult = repository.getCartFoods()) {
+                    is Resource.Success -> {
+                        val cartFoods = cartResult.data ?: emptyList()
+                        
+                        // Remove each item from cart
+                        cartFoods.forEach { cartFood ->
+                            repository.removeFromCart(cartFood.sepetYemekId)
+                        }
+                        
+                        _operationResult.value = Resource.Success("Cart cleared successfully")
+                        loadCartFoods() // Refresh cart state
+                    }
+                    else -> {
+                        _operationResult.value = Resource.Error("Failed to clear cart")
+                    }
+                }
+            } catch (e: Exception) {
+                _operationResult.value = Resource.Error("Error clearing cart: ${e.localizedMessage}")
+            }
+        }
+    }
 } 
